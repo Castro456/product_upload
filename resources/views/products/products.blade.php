@@ -1,5 +1,5 @@
 @extends('layouts.header')
-
+<link rel="stylesheet" href="{{ asset('css/toastr.scss') }}">
 @section('content')
     <div class="container mt-5">
         <h1 class="mb-4">Product Management</h1>
@@ -35,9 +35,9 @@
     </div>
 
 <script src="{{ asset('js/jquery.js') }}"></script>
-<script>
+{{-- <script>
     var products = @json($products); // Pass product data to JavaScript
-</script>
+</script> --}}
 <script src="{{ asset('js/products.js') }}"></script>
 
 @endsection

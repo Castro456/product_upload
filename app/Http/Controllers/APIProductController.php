@@ -12,6 +12,25 @@ class APIProductController extends Controller
 {
 
     /**
+     * This method is used to view all the products
+     * 
+     * @return json
+     */
+    public function view()
+    {
+        $products = Product::with('product_image')->get(); //Get the products along with its name.
+
+        // Construct image URLs
+        foreach ($products as $product) {
+            foreach ($product->product_image as $image) {
+                $image->image_url = asset('storage/' . $image->product_image_path); //Store the images in the storage link directory.
+            }
+        }
+
+        return response()->json(['products' => $products], 200);
+    }
+
+    /**
      * Store a newly created product in the database
      * 
      * @param product_name

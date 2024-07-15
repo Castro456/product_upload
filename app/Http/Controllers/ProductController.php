@@ -16,16 +16,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('product_image')->get(); //Get the products along with its name.
-
-        // Construct image URLs
-        foreach ($products as $product) {
-            foreach ($product->product_image as $image) {
-                $image->image_url = asset('storage/' . $image->product_image_path); //Store the images in the storage link directory.
-            }
-        }
-
-        return view('products.products', compact('products')); //compact shorthand for 'products' => $products
+        return view('products.products');
     }
 
     /** 
@@ -42,13 +33,20 @@ class ProductController extends Controller
      * This method is used to import products from Excel file (except image)
      * 
      */ 
-    public function import(Request $request)
+    public function import()
     {
-        $request->validate([
+        $validate = validator()->make(request()->all(), [
             'import_file' => 'required|mimes:xlsx,xls,csv'
-        ]);
+        ])->errors();
 
-        $file = $request->file('import_file');
+        if ($validate->any()) {
+            return response()->json([
+                'status' => 'validation_failed',
+                'message' => $validate->first()
+            ], 422);
+        }
+
+        $file = request()->file('import_file');
 
         try {
             Excel::import(new ProductImport, $file);

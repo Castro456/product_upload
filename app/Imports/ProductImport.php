@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Product;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -12,26 +13,14 @@ class ProductImport implements ToModel, WithHeadingRow
 {
   public function model(array $row)
   {
+    // Need to add validation
 
-    Validator::make($row, [
-      'product_name' => 'required',
-      'price' => 'required|numeric',
-      'sku' => [
-        'required',
-        Rule::unique('products', 'sku')
-      ],
-      'description' => 'required',
-      // 'image_path' => 'required',
-    ])->validate();
-
-    // Not implemented image insert
-    $product = Product::create([
-      'product_name' => $row['product_name'],
+    return new Product([
+      'product_name' => $row['name'],
       'price' => $row['price'],
       'sku' => $row['sku'],
       'description' => $row['description'],
+      // 'image' => $row['images'] // Image insertion not implemented.
     ]);
-
-    return $product;
   }
 }
