@@ -41,7 +41,7 @@ class APIProductController extends Controller
      * 
      * @return json
      */
-    public function store(Request $request)
+    public function store()
     {
         $validator = validator()->make(request()->all(), [
             'product_name' => 'bail|required|string|max:255',
